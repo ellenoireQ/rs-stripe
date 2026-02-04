@@ -1,17 +1,15 @@
 pub struct CreateClient {
-    client: &'static str,
+    key: &'static str,
 }
 
 impl CreateClient {
-    /// Storing client_value to client
-    pub fn new(client_value: &'static str) -> Self {
-        Self {
-            client: client_value,
-        }
+    /// Storing key (lifetime)
+    pub fn new(key: &'static str) -> Self {
+        Self { key: key }
     }
 
-    /// Returning client value
-    pub fn show(self) -> &'static str {
-        return self.client;
+    /// Returning key value
+    pub fn get_key(self) -> &'static str {
+        return self.key;
     }
 }

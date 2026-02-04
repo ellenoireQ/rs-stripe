@@ -42,7 +42,7 @@ async fn fetch() -> AppResult<()> {
 async fn main() -> AppResult<()> {
     let client = CreateClient::new("sk-12343-232323");
 
-    println!("{:?}", client.show());
+    println!("{:?}", client.get_key());
     match fetch().await {
         Err(AppError::Api(e)) => {
             println!("stripe error type: {}", e.error.r#type);
