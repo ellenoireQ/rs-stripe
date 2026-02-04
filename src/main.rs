@@ -1,7 +1,11 @@
 use core::fmt;
 
-use crate::errors::{AppError, AppResult};
+use crate::{
+    client::client::CreateClient,
+    errors::{AppError, AppResult},
+};
 use serde::Deserialize;
+mod client;
 mod errors;
 
 #[derive(Deserialize, Debug)]
@@ -36,6 +40,9 @@ async fn fetch() -> AppResult<()> {
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
+    let client = CreateClient::new("sk-12343-232323");
+
+    println!("{:?}", client.show());
     match fetch().await {
         Err(AppError::Api(e)) => {
             println!("stripe error type: {}", e.error.r#type);
@@ -51,4 +58,3 @@ async fn main() -> AppResult<()> {
 
     Ok(())
 }
-
