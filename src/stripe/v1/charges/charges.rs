@@ -3,7 +3,7 @@ use std::sync::Arc;
 use reqwest::Client;
 use serde::de::DeserializeOwned;
 
-use crate::errors::AppResult;
+use crate::errors::{AppError, AppResult};
 
 pub struct Charges {
     key: Arc<String>,
@@ -36,7 +36,10 @@ impl Charges {
     where
         T: DeserializeOwned,
     {
-        if self.query.is_empty() && !self.filter.is_empty() {
+        if !self.query.is_empty() {
+            if self.filter.is_empty() {
+                return Err(AppError::InvalidRequest);
+            }
             let res = self
                 .client
                 .get(format!("https://api.stripe.com/v1/charges/{}", self.filter))
