@@ -1,12 +1,12 @@
 use core::fmt;
 
 use crate::{
-    client::client::CreateClient,
     errors::{AppError, AppResult},
+    stripe::stripe::Stripe,
 };
 use serde::Deserialize;
-mod client;
 mod errors;
+mod stripe;
 
 #[derive(Deserialize, Debug)]
 pub struct ErrorBody {
@@ -40,7 +40,7 @@ async fn fetch() -> AppResult<()> {
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    let client = CreateClient::new("sk-12343-232323");
+    let client = Stripe::new("sk-12343-232323");
 
     println!("{:?}", client.get_key());
     match fetch().await {

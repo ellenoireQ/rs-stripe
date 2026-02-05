@@ -1,8 +1,8 @@
-pub struct CreateClient {
+pub struct Stripe {
     key: &'static str,
 }
 
-impl CreateClient {
+impl Stripe {
     /// Storing key (lifetime)
     pub fn new(key: &'static str) -> Self {
         Self { key: key }
