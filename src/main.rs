@@ -40,7 +40,7 @@ async fn fetch() -> AppResult<()> {
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    let client = Stripe::new("sk-12343-232323");
+    let client = Stripe::new("sk-12343-232323".to_string());
 
     println!("{:?}", client.get_key());
     client.v1().charges();

@@ -1,13 +1,15 @@
+use std::sync::Arc;
+
 use crate::stripe::v1::charges::charges::ChargesResponse;
 
 /// DOCS Reference: https://docs.stripe.com/api/
 #[allow(non_camel_case_types)]
 pub struct v1 {
-    key: &'static str,
+    key: Arc<String>,
 }
 
 impl v1 {
-    pub fn new(key: &'static str) -> Self {
+    pub fn new(key: Arc<String>) -> Self {
         Self { key }
     }
     /// /v1/charges:
