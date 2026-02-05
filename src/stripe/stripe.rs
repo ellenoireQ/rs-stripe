@@ -1,8 +1,11 @@
 use std::sync::Arc;
 
+use reqwest::Client;
+
 use crate::stripe::v1::v1::v1;
 pub struct Stripe {
     key: Arc<String>,
+    client: Client,
 }
 
 impl Stripe {
@@ -10,6 +13,7 @@ impl Stripe {
     pub fn new(key: impl Into<String>) -> Self {
         Self {
             key: Arc::new(key.into()),
+            client: Client::new(),
         }
     }
 
@@ -21,6 +25,6 @@ impl Stripe {
     /// Using v1 as fallback to better type structure
     /// for example: stripe.v1().X();
     pub fn v1(&self) -> v1 {
-        v1::new(self.key.clone())
+        v1::new(self.key.clone(), self.client.clone())
     }
 }

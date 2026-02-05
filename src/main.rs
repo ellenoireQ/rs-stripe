@@ -40,22 +40,25 @@ async fn fetch() -> AppResult<()> {
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    let client = Stripe::new("sk-12343-232323".to_string());
+    let client = Stripe::new("".to_string());
 
     println!("{:?}", client.get_key());
-    client.v1().charges();
-    match fetch().await {
-        Err(AppError::Api(e)) => {
-            println!("stripe error type: {}", e.error.r#type);
-            println!("message: {}", e.error.message);
-        }
-        Err(e) => {
-            println!("other error: {}", e);
-        }
-        Ok(_) => {
-            println!("success");
-        }
-    }
+    let m = client.v1().charges().await?;
 
+    println!("{:#?}", m);
+    /*
+        match fetch().await {
+            Err(AppError::Api(e)) => {
+                println!("stripe error type: {}", e.error.r#type);
+                println!("message: {}", e.error.message);
+            }
+            Err(e) => {
+                println!("other error: {}", e);
+            }
+            Ok(_) => {
+                println!("success");
+            }
+        }
+    */
     Ok(())
 }
