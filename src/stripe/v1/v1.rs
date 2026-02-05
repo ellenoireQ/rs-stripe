@@ -4,7 +4,7 @@ use reqwest::Client;
 
 use crate::{
     errors::{self, AppError, AppResult},
-    stripe::v1::charges::charges::ChargesResponse,
+    stripe::v1::charges::definition::ChargesResponse,
 };
 
 /// DOCS Reference: https://docs.stripe.com/api/
