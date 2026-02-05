@@ -17,6 +17,6 @@ impl Stripe {
     /// Using v1 as fallback to better type structure
     /// for example: stripe.v1().X();
     pub fn v1(&self) -> v1 {
-        v1::new()
+        v1::new(self.get_key())
     }
 }

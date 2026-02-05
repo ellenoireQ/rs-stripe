@@ -2,17 +2,20 @@ use crate::stripe::v1::charges::charges::ChargesResponse;
 
 /// DOCS Reference: https://docs.stripe.com/api/
 #[allow(non_camel_case_types)]
-pub struct v1;
+pub struct v1 {
+    key: &'static str,
+}
 
 impl v1 {
-    pub fn new() -> Self {
-        Self
+    pub fn new(key: &'static str) -> Self {
+        Self { key }
     }
     /// /v1/charges:
     ///
     /// List of history of charges created will listed in charges endpoint
     /// this function also will return ChargesResponse struct
     pub fn charges(&self) -> ChargesResponse {
+        println!("Stripe API Key: {}", self.key);
         ChargesResponse {
             object: "list".to_string(),
             data: vec![],
