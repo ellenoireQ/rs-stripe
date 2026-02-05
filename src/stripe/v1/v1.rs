@@ -4,7 +4,7 @@ use reqwest::Client;
 
 use crate::{
     errors::{self, AppError, AppResult},
-    stripe::v1::charges::definition::ChargesResponse,
+    stripe::v1::charges::{charges::Charges, definition::ChargesResponse},
 };
 
 /// DOCS Reference: https://docs.stripe.com/api/
@@ -22,27 +22,7 @@ impl v1 {
     ///
     /// List of history of charges created will listed in charges endpoint
     /// this function also will return ChargesResponse struct
-    pub async fn charges(&self) -> AppResult<ChargesResponse> {
-        let response = self
-            .client
-            .get("https://api.stripe.com/v1/charges")
-            .basic_auth(&*self.key, Some(""))
-            .send()
-            .await
-            .map_err(errors::AppError::Network)?;
-
-        let status = response.status();
-
-        if !status.is_success() {
-            let body = response.text().await.unwrap_or_default();
-            return Err(errors::AppError::Api(body));
-        }
-
-        let data = response
-            .json::<ChargesResponse>()
-            .await
-            .map_err(errors::AppError::Network)?;
-
-        Ok(data)
+    pub fn charges(&self) -> Charges {
+        Charges::new()
     }
 }

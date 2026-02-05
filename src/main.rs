@@ -7,6 +7,7 @@ use crate::{
 };
 use dotenvy::dotenv;
 use serde::Deserialize;
+use serde_json::Value;
 mod errors;
 mod stripe;
 
@@ -16,7 +17,13 @@ async fn main() -> AppResult<()> {
     let client = Stripe::new(env::var("STRIPE_API_KEY").expect("STRIPE_API_KEY is not set"));
 
     println!("{:?}", client.get_key());
-    let m = client.v1().charges().await?;
+    let m = client
+        .v1()
+        .charges()
+        .query("data.customer")
+        .query("HIs")
+        .get::<Value>()
+        .await?;
 
     println!("{:#?}", m);
     /*
