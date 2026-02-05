@@ -1,9 +1,11 @@
 use core::fmt;
+use std::env;
 
 use crate::{
     errors::{AppError, AppResult},
     stripe::stripe::Stripe,
 };
+use dotenvy::dotenv;
 use serde::Deserialize;
 mod errors;
 mod stripe;
@@ -40,7 +42,8 @@ async fn fetch() -> AppResult<()> {
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
-    let client = Stripe::new("".to_string());
+    dotenv().ok();
+    let client = Stripe::new(env::var("STRIPE_API_KEY").unwrap());
 
     println!("{:?}", client.get_key());
     let m = client.v1().charges().await?;
