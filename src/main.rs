@@ -43,7 +43,7 @@ async fn fetch() -> AppResult<()> {
 #[tokio::main]
 async fn main() -> AppResult<()> {
     dotenv().ok();
-    let client = Stripe::new(env::var("STRIPE_API_KEY").unwrap());
+    let client = Stripe::new(env::var("STRIPE_API_KEY").expect("STRIPE_API_KEY is not set"));
 
     println!("{:?}", client.get_key());
     let m = client.v1().charges().await?;
