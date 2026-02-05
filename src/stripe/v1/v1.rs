@@ -23,6 +23,6 @@ impl v1 {
     /// List of history of charges created will listed in charges endpoint
     /// this function also will return ChargesResponse struct
     pub fn charges(&self) -> Charges {
-        Charges::new()
+        Charges::new(self.key.clone(), self.client.clone())
     }
 }

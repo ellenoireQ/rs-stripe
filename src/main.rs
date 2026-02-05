@@ -17,13 +17,7 @@ async fn main() -> AppResult<()> {
     let client = Stripe::new(env::var("STRIPE_API_KEY").expect("STRIPE_API_KEY is not set"));
 
     println!("{:?}", client.get_key());
-    let m = client
-        .v1()
-        .charges()
-        .query("data.customer")
-        .query("HIs")
-        .get::<Value>()
-        .await?;
+    let m = client.v1().charges().get::<Value>().await?;
 
     println!("{:#?}", m);
     /*

@@ -1,14 +1,25 @@
+use std::sync::Arc;
+
+use reqwest::Client;
 use serde::de::DeserializeOwned;
 
 use crate::errors::AppResult;
 
 pub struct Charges {
+    key: Arc<String>,
+    client: Client,
     pub query: Vec<(&'static str, String)>,
+    pub filter: String,
 }
 
 impl Charges {
-    pub fn new() -> Self {
-        Self { query: Vec::new() }
+    pub fn new(key: Arc<String>, client: Client) -> Self {
+        Self {
+            key,
+            client,
+            query: Vec::new(),
+            filter: String::new(),
+        }
     }
 
     pub fn query(mut self, value: impl Into<String>) -> Self {
@@ -16,10 +27,35 @@ impl Charges {
         self
     }
 
+    pub fn filter(mut self, value: impl Into<String>) -> Self {
+        self.filter = value.into();
+        self
+    }
+
     pub async fn get<T>(self) -> AppResult<T>
     where
         T: DeserializeOwned,
     {
-        Ok(todo!())
+        if self.query.is_empty() && !self.filter.is_empty() {
+            let res = self
+                .client
+                .get(format!("https://api.stripe.com/v1/charges/{}", self.filter))
+                .bearer_auth(self.key.as_ref())
+                .send()
+                .await?
+                .json::<T>()
+                .await?;
+            Ok(res)
+        } else {
+            let mut req = self
+                .client
+                .get("https://api.stripe.com/v1/charges")
+                .bearer_auth(self.key.as_ref());
+            for (k, v) in self.query {
+                req = req.query(&[(k, v)]);
+            }
+            let res = req.send().await?.json::<T>().await?;
+            Ok(res)
+        }
     }
 }
