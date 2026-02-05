@@ -43,6 +43,7 @@ async fn main() -> AppResult<()> {
     let client = Stripe::new("sk-12343-232323");
 
     println!("{:?}", client.get_key());
+    client.v1().charges();
     match fetch().await {
         Err(AppError::Api(e)) => {
             println!("stripe error type: {}", e.error.r#type);
