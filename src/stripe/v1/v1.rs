@@ -2,7 +2,11 @@ use std::sync::Arc;
 
 use reqwest::Client;
 
-use crate::stripe::v1::charges::charges::ChargesResponse;
+use crate::{
+    ErrorResponse,
+    errors::{self, AppError, AppResult},
+    stripe::v1::charges::charges::ChargesResponse,
+};
 
 /// DOCS Reference: https://docs.stripe.com/api/
 #[allow(non_camel_case_types)]
@@ -19,17 +23,27 @@ impl v1 {
     ///
     /// List of history of charges created will listed in charges endpoint
     /// this function also will return ChargesResponse struct
-    pub async fn charges(&self) -> Result<ChargesResponse, reqwest::Error> {
-        println!("Stripe API Key: {}", self.key);
-
-        let res = self
+    pub async fn charges(&self) -> AppResult<ChargesResponse> {
+        let response = self
             .client
             .get("https://api.stripe.com/v1/charges")
             .basic_auth(&*self.key, Some(""))
             .send()
-            .await?
+            .await
+            .map_err(errors::AppError::Network)?;
+
+        let status = response.status();
+
+        if !status.is_success() {
+            let body = response.text().await.unwrap_or_default();
+            return Err(errors::AppError::Api(body));
+        }
+
+        let data = response
             .json::<ChargesResponse>()
-            .await?;
-        Ok(res)
+            .await
+            .map_err(errors::AppError::Network)?;
+
+        Ok(data)
     }
 }

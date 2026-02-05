@@ -6,7 +6,7 @@ pub enum AppError {
     InvalidRequest,
 
     #[error("api error: {0}")]
-    Api(ErrorResponse),
+    Api(String),
 
     #[error("network error")]
     Network(#[from] reqwest::Error),

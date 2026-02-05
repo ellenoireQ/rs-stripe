@@ -34,7 +34,7 @@ async fn fetch() -> AppResult<()> {
 
     if !status.is_success() {
         let err: ErrorResponse = serde_json::from_str(&body)?;
-        return Err(errors::AppError::Api(err));
+        return Err(errors::AppError::Api(err.to_string()));
     }
 
     Ok(())
