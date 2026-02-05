@@ -1,4 +1,6 @@
-use crate::ErrorResponse;
+use std::fmt;
+
+use serde::Deserialize;
 
 #[derive(Debug, thiserror::Error)]
 pub enum AppError {

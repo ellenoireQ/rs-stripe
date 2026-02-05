@@ -3,7 +3,6 @@ use std::sync::Arc;
 use reqwest::Client;
 
 use crate::{
-    ErrorResponse,
     errors::{self, AppError, AppResult},
     stripe::v1::charges::charges::ChargesResponse,
 };
