@@ -4,7 +4,10 @@ use reqwest::Client;
 
 use crate::{
     errors::{self, AppError, AppResult},
-    stripe::v1::charges::{charges::Charges, definition::ChargesResponse},
+    stripe::v1::{
+        charges::{charges::Charges, definition::ChargesResponse},
+        payment_intents::payment_intent::PaymentIntent,
+    },
 };
 
 /// DOCS Reference: https://docs.stripe.com/api/
@@ -24,5 +27,9 @@ impl v1 {
     /// this function also will return ChargesResponse struct
     pub fn charges(&self) -> Charges {
         Charges::new(self.key.clone(), self.client.clone())
+    }
+
+    pub fn payment_intents(self) -> PaymentIntent {
+        PaymentIntent::new(self.key.clone(), self.client.clone())
     }
 }

@@ -54,7 +54,13 @@ async fn main() -> AppResult<()> {
             "defaults".to_string(),
         ],
     };
-    let m = client.v2().core().create().accounts(payload).await?;
+    //let m = client.v2().core().create().accounts(payload).await?;
+
+    let m = client
+        .v1()
+        .payment_intents()
+        .create(1000, "usd".to_string())
+        .await?;
 
     println!("{:#?}", m);
     /*
