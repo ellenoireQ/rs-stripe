@@ -28,7 +28,7 @@ impl Stripe {
         v1::new(self.key.clone(), self.client.clone())
     }
     /// Using v2 as fallback to better type structure
-    /// for example: stripe.v1().X();
+    /// for example: stripe.v2().X();
     pub fn v2(&self) -> v2 {
         v2::new(self.key.clone(), self.client.clone())
     }
