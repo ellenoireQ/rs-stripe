@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use reqwest::Client;
+use serde_json::Value;
 
 use crate::errors::AppError;
 
@@ -26,6 +27,30 @@ impl PaymentIntent {
 
         Ok(match res {
             status if status.status().is_success() => {}
+            status => {
+                return Err(AppError::Api(format!(
+                    "API request failed with status: {}",
+                    status.status()
+                )));
+            }
+        })
+    }
+
+    pub async fn list(self) -> Result<Value, AppError> {
+        let res = self
+            .client
+            .get("https://api.stripe.com/v1/payment_intents")
+            .bearer_auth(self.key)
+            .header("Stripe-Version", "2026-01-28.preview")
+            .send()
+            .await
+            .map_err(|e| AppError::Api(e.to_string()))?;
+
+        Ok(match res {
+            status if status.status().is_success() => status
+                .json::<Value>()
+                .await
+                .map_err(|e| AppError::Api(e.to_string()))?,
             status => {
                 return Err(AppError::Api(format!(
                     "API request failed with status: {}",
