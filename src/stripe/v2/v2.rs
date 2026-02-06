@@ -3,7 +3,7 @@ use std::sync::Arc;
 
 use reqwest::Client;
 
-use crate::stripe::v2::core::core;
+use crate::stripe::v2::core::Core;
 
 #[allow(non_camel_case_types)]
 pub struct v2 {
@@ -16,7 +16,7 @@ impl v2 {
         Self { key, client }
     }
 
-    pub fn core(self) -> core {
-        core::new(self.key, self.client)
+    pub fn core(self) -> Core {
+        Core::new(self.key, self.client)
     }
 }
