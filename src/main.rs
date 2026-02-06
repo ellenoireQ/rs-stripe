@@ -18,7 +18,7 @@ async fn main() -> AppResult<()> {
 
     println!("{:?}", client.get_key());
     let m = client.v1().charges().query("value").get::<Value>().await?;
-
+    client.v2().core().accounts();
     println!("{:#?}", m);
     /*
         match fetch().await {
