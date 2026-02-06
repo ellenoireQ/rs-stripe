@@ -6,11 +6,22 @@ use reqwest::Client;
 pub struct core {
     key: Arc<String>,
     client: Client,
+    create: bool,
 }
 
 impl core {
     pub fn new(key: Arc<String>, client: Client) -> Self {
-        Self { key, client }
+        Self {
+            key,
+            client,
+            create: false,
+        }
+    }
+
+    /// Create mode
+    pub fn create(mut self) -> Self {
+        self.create = true;
+        self
     }
 
     /// /v2/core/accounts
@@ -22,7 +33,9 @@ impl core {
     /// interacts with Stripe. It stores identifying information and
     /// configuration for enabled features.
     pub fn accounts(self) {
-        todo!()
+        if self.create {
+            todo!()
+        }
     }
     pub fn close(self) {
         todo!()
