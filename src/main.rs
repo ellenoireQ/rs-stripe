@@ -56,7 +56,7 @@ async fn main() -> AppResult<()> {
     };
     //let m = client.v2().core().create().accounts(payload).await?;
 
-    let m = client.v1().payment_intents().list().await?;
+    let m = client.v1().payment_intents().list::<Value>().await?;
 
     println!("{:#?}", m);
     /*

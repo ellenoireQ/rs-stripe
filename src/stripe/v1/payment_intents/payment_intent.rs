@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use reqwest::Client;
+use serde::de::DeserializeOwned;
 use serde_json::Value;
 
 use crate::errors::AppError;
@@ -36,7 +37,10 @@ impl PaymentIntent {
         })
     }
 
-    pub async fn list(self) -> Result<Value, AppError> {
+    pub async fn list<T>(self) -> Result<T, AppError>
+    where
+        T: DeserializeOwned,
+    {
         let res = self
             .client
             .get("https://api.stripe.com/v1/payment_intents")
@@ -48,7 +52,7 @@ impl PaymentIntent {
 
         Ok(match res {
             status if status.status().is_success() => status
-                .json::<Value>()
+                .json::<T>()
                 .await
                 .map_err(|e| AppError::Api(e.to_string()))?,
             status => {
